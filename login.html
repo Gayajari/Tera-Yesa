@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login Admin</title>
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body class="login-body">
+  <div class="login-wrapper">
+    <form id="loginForm" class="login-card" autocomplete="on">
+      <h1 class="login-title">Masuk ke Panel Admin</h1>
+      <p class="login-subtitle">Gunakan akun admin yang telah terdaftar</p>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required placeholder="admin@email.com" />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required placeholder="••••••••" />
+      </div>
+
+      <button type="submit" id="loginBtn" class="btn btn-primary btn-block">
+        <span id="loginBtnText">Masuk</span>
+      </button>
+
+      <p id="loginError" class="login-error hidden"></p>
+    </form>
+  </div>
+
+  <div id="toastContainer" class="toast-container"></div>
+
+  <script type="module">
+    import { login, redirectIfLoggedIn } from "./js/auth.js";
+
+    // Jika sudah login, langsung lempar ke dashboard
+    redirectIfLoggedIn(() => {
+      window.location.href = "admin.html";
+    });
+
+    const form = document.getElementById("loginForm");
+    const errorEl = document.getElementById("loginError");
+    const loginBtn = document.getElementById("loginBtn");
+    const loginBtnText = document.getElementById("loginBtnText");
+
+    function showError(message) {
+      errorEl.textContent = message;
+      errorEl.classList.remove("hidden");
+    }
+
+    function setLoading(isLoading) {
+      loginBtn.disabled = isLoading;
+      loginBtnText.textContent = isLoading ? "Memproses..." : "Masuk";
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      errorEl.classList.add("hidden");
+      setLoading(true);
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      try {
+        await login(email, password);
+        window.location.href = "admin.html";
+      } catch (err) {
+        console.error(err);
+        showError("Email atau password salah. Silakan coba lagi.");
+      } finally {
+        setLoading(false);
+      }
+    });
+  </script>
+</body>
+</html>

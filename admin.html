@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Admin</title>
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+  <div id="globalLoader" class="global-loader hidden">
+    <div class="spinner"></div>
+  </div>
+
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <span class="sidebar-logo">CMS Admin</span>
+        <button id="menuToggle" class="menu-toggle mobile-only" aria-label="Tutup menu">✕</button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-section="dashboard">📊 Dashboard</button>
+        <button class="nav-item" data-section="data-utama">🏠 Data Utama</button>
+        <button class="nav-item" data-section="posting">📄 Posting</button>
+        <button class="nav-item" data-section="tambah">➕ Tambah</button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <label class="dark-mode-switch">
+          <input type="checkbox" id="darkModeToggle" />
+          <span>Dark Mode</span>
+        </label>
+        <button class="nav-item logout-btn">🚪 Logout</button>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="admin-main">
+      <header class="admin-topbar">
+        <button id="menuToggleTop" class="menu-toggle mobile-only" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+        <div class="topbar-title">Panel Admin</div>
+        <div class="topbar-user">
+          <span id="adminEmailLabel"></span>
+          <button class="btn btn-ghost btn-sm logout-btn">Logout</button>
+        </div>
+      </header>
+
+      <!-- Section: Dashboard -->
+      <section id="section-dashboard" class="admin-section active">
+        <h2>Dashboard</h2>
+        <div class="stat-cards">
+          <div class="stat-card">
+            <span class="stat-value" id="statTotalPosting">0</span>
+            <span class="stat-label">Total Posting</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value" id="statLastId">-</span>
+            <span class="stat-label">ID Terakhir</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Posting Terbaru</h3>
+          <ul id="dashboardRecentList" class="recent-list"></ul>
+        </div>
+      </section>
+
+      <!-- Section: Data Utama -->
+      <section id="section-data-utama" class="admin-section">
+        <h2>Data Utama</h2>
+        <p class="section-desc">Data ini menjadi template dasar untuk seluruh posting. Field yang tidak diubah pada suatu posting akan otomatis memakai nilai dari sini.</p>
+
+        <form id="dataUtamaForm" class="admin-form">
+          <div class="card">
+            <h3>Tombol Play</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="utama-play1">Play 1 (URL)</label>
+                <input type="url" id="utama-play1" placeholder="https://..." />
+              </div>
+              <div class="form-group">
+                <label for="utama-play2">Play 2 (URL)</label>
+                <input type="url" id="utama-play2" placeholder="https://..." />
+              </div>
+              <div class="form-group">
+                <label for="utama-play3">Play 3 (URL)</label>
+                <input type="url" id="utama-play3" placeholder="https://..." />
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Gambar</h3>
+            <div id="dataUtamaImages" class="image-fields-grid"></div>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Simpan Data Utama</button>
+        </form>
+      </section>
+
+      <!-- Section: Posting (daftar) -->
+      <section id="section-posting" class="admin-section">
+        <h2>Daftar Posting</h2>
+        <div class="posting-toolbar">
+          <input type="text" id="postingSearchInput" placeholder="Cari ID posting..." class="search-input" />
+        </div>
+        <div class="card table-card">
+          <table class="posting-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Link</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="postingListBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section: Tambah / Edit Posting -->
+      <section id="section-tambah" class="admin-section">
+        <h2 id="postingFormTitle">Tambah Posting Baru</h2>
+        <p class="section-desc">Hanya isi field yang ingin diubah. Field yang dikosongkan otomatis memakai data utama.</p>
+
+        <form id="postingForm" class="admin-form">
+          <div class="card">
+            <div class="form-group">
+              <label for="postingIdInput">ID Posting</label>
+              <div class="input-with-btn">
+                <input type="text" id="postingIdInput" placeholder="contoh: 205" required />
+                <button type="button" id="postingAutoIdBtn" class="btn btn-secondary btn-sm">Auto ID</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Tombol Play (opsional)</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="posting-play1">Play 1 (URL)</label>
+                <input type="url" id="posting-play1" placeholder="Kosongkan jika tidak berubah" />
+              </div>
+              <div class="form-group">
+                <label for="posting-play2">Play 2 (URL)</label>
+                <input type="url" id="posting-play2" placeholder="Kosongkan jika tidak berubah" />
+              </div>
+              <div class="form-group">
+                <label for="posting-play3">Play 3 (URL)</label>
+                <input type="url" id="posting-play3" placeholder="Kosongkan jika tidak berubah" />
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Gambar (opsional)</h3>
+            <div id="postingImages" class="image-fields-grid"></div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Simpan Posting</button>
+            <button type="button" id="postingResetBtn" class="btn btn-ghost">Reset Form</button>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal konfirmasi delete -->
+  <div id="deleteModal" class="modal hidden">
+    <div class="modal-box">
+      <h3>Konfirmasi Hapus</h3>
+      <p id="deleteModalText"></p>
+      <div class="modal-actions">
+        <button id="deleteCancelBtn" class="btn btn-ghost">Batal</button>
+        <button id="deleteConfirmBtn" class="btn btn-danger">Ya, Hapus</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toastContainer" class="toast-container"></div>
+
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>

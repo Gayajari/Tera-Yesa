@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tera Yesa</title>
+<link rel="stylesheet" href="css/style.css" />
+<style>
+/* ============================================================
+   Style khusus desain halaman ini.
+   Class/id di sini tidak bentrok dengan css/style.css,
+   yang tetap dipakai untuk #pageLoader & .spinner (loading system).
+   ============================================================ */
+
+html, body{
+  height:100%;
+}
+
+body{
+  font-family:"Segoe UI", Arial, sans-serif;
+  margin:0;
+  background:#fff;
+  color:#111;
+}
+
+h1{
+  font-size:36px;
+  font-weight:700;
+}
+
+.site-header{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  margin:15px 0;
+}
+.site-header img{
+  width:42px;
+  height:42px;
+  border-radius:8px;
+}
+.site-header h1{
+  margin:0;
+  font-size:24px;
+}
+
+.page-wrap{
+  max-width:640px;
+  min-height:100vh;
+  margin:0 auto;
+  padding:0 16px 40px;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+}
+
+.section-title{
+  margin-bottom:5px;
+}
+
+/* Section Play Now & Join Telegram/WhatsApp: rata kiri */
+.left-block{
+  text-align:left;
+}
+.left-block .section-title{
+  text-align:left;
+}
+
+/* Bagian footer + copyright didorong mentok ke bawah halaman */
+.page-footer{
+  margin-top:auto;
+}
+
+.play-link{
+  display:inline-block;
+  font-size:28px;
+  text-decoration:none;
+  transition:transform 0.2s ease;
+}
+.play-link:hover,
+.play-link:active{
+  transform:scale(1.15);
+}
+
+.text-link{
+  display:inline-block;
+  margin:4px 0;
+}
+
+#foto1Img,
+#foto2Img{
+    width:100%;
+    height:auto;
+    display:block;
+    margin-bottom:10px;
+    border-radius:8px;
+}
+
+.gallery{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:5px;
+}
+
+.gallery img{
+    width:100%;
+    height:auto;
+    display:block;
+    border-radius: 8px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.gallery img:hover,
+.gallery img:active {
+  transform: scale(1.03);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.site-footer{
+  background:#358;
+  color:#fff;
+  padding:15px;
+  text-align:center;
+  margin-top:20px;
+}
+
+.copyright{
+  text-align:center;
+  font-size:13px;
+  color:#666;
+}
+</style>
+</head>
+
+<body>
+  <!-- Loader tampil sampai data Firestore selesai dimuat (dikendalikan oleh js/app.js) -->
+  <div id="pageLoader" class="page-loader">
+    <div class="spinner"></div>
+  </div>
+
+  <div id="mainContent" class="page-wrap">
+
+    <div class="site-header">
+      <img src="https://i.ibb.co.com/XkX0Hd5h/unnamed.png" alt="Logo Tera Yesa">
+      <h1>Tera Yesa</h1>
+    </div>
+
+    <div class="left-block">
+      <h2 class="section-title">Play Now</h2>
+      <p>⬇️⬇️⬇️</p>
+
+      <a id="play1Btn" class="play-link" href="#" target="_blank" rel="noopener noreferrer">▶️</a>
+      <br><br>
+      <a id="play2Btn" class="play-link" href="#" target="_blank" rel="noopener noreferrer">▶️</a>
+      <br><br>
+      <a id="play3Btn" class="play-link" href="#" target="_blank" rel="noopener noreferrer">▶️</a>
+
+      <h2 class="section-title" style="margin-top:24px;">Join Telegram / WhatsApp</h2>
+      <p>⬇️⬇️⬇️</p>
+
+      <a class="text-link" href="https://t.me/terayesa" target="_blank" rel="noopener noreferrer">Join Telegram</a><br>
+      <a class="text-link" href="https://chat.whatsapp.com/F2F8kCD2h0YIncklXEM3lb" target="_blank" rel="noopener noreferrer">Join WhatsApp</a>
+    </div>
+
+    <br><br>
+
+    <a id="foto1Link" href="#" target="_blank" rel="noopener noreferrer">
+      <img id="foto1Img" src="assets/placeholder.png" alt="Foto 1" loading="lazy">
+    </a>
+
+    <a id="foto2Link" href="#" target="_blank" rel="noopener noreferrer">
+      <img id="foto2Img" src="assets/placeholder.png" alt="Foto 2" loading="lazy">
+    </a>
+
+    <div class="gallery">
+      <a id="galeri1Link" href="#" target="_blank" rel="noopener noreferrer">
+        <img id="galeri1Img" src="assets/placeholder.png" alt="Galeri 1" loading="lazy">
+      </a>
+      <a id="galeri2Link" href="#" target="_blank" rel="noopener noreferrer">
+        <img id="galeri2Img" src="assets/placeholder.png" alt="Galeri 2" loading="lazy">
+      </a>
+      <a id="galeri3Link" href="#" target="_blank" rel="noopener noreferrer">
+        <img id="galeri3Img" src="assets/placeholder.png" alt="Galeri 3" loading="lazy">
+      </a>
+    </div>
+
+    <div class="page-footer">
+      <hr>
+      <div class="site-footer">
+        @Tera_Yesa<br>
+        Thanks for coming !!!
+      </div>
+
+      <p class="copyright">
+        ©2026 since<br>
+        All Rights Reserved.
+      </p>
+    </div>
+
+  </div>
+
+  <!-- Seluruh logika ambil & gabung data Firestore ada di js/app.js,
+       yang membaca konfigurasi dari js/firebase.js (bukan inline di sini). -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
