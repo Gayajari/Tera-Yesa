@@ -130,6 +130,75 @@ h1{
   font-size:13px;
   color:#666;
 }
+
+/* ------------------------------------------------------------
+   Responsif: tablet, laptop, PC, dan mode desktop
+   Layout dasar tetap 1 kolom (mobile-first), lalu melebar
+   dan menyesuaikan untuk layar yang lebih besar.
+   ------------------------------------------------------------ */
+
+/* Tablet ke atas (>=600px) */
+@media (min-width: 600px) {
+  .page-wrap{
+    max-width: 760px;
+    padding: 0 24px 48px;
+  }
+  h1{
+    font-size: 40px;
+  }
+  .play-link{
+    font-size: 32px;
+  }
+  .foto-section{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  #foto1Img,
+  #foto2Img{
+    margin-bottom: 0;
+    height: 100%;
+    object-fit: cover;
+    aspect-ratio: 4 / 3;
+  }
+  .gallery{
+    gap: 12px;
+  }
+}
+
+/* Laptop / PC / mode desktop (>=1024px) */
+@media (min-width: 1024px) {
+  .page-wrap{
+    max-width: 960px;
+    padding: 0 32px 64px;
+  }
+  .site-header img{
+    width: 56px;
+    height: 56px;
+  }
+  .site-header h1{
+    font-size: 30px;
+  }
+  h1{
+    font-size: 46px;
+  }
+  .play-link{
+    font-size: 36px;
+  }
+  .text-link{
+    font-size: 17px;
+  }
+  .gallery{
+    gap: 16px;
+  }
+}
+
+/* Layar sangat lebar (>=1440px), misalnya monitor PC besar */
+@media (min-width: 1440px) {
+  .page-wrap{
+    max-width: 1080px;
+  }
+}
 </style>
 </head>
 
@@ -145,7 +214,7 @@ h1{
       <img src="https://i.ibb.co.com/XkX0Hd5h/unnamed.png" alt="Logo Tera Yesa">
       <h1>Tera Yesa</h1>
     </div>
-
+    
     <div class="left-block">
       <h2 class="section-title">Play Now</h2>
       <p>⬇️⬇️⬇️</p>
@@ -155,8 +224,6 @@ h1{
       <a id="play2Btn" class="play-link" href="#" target="_blank" rel="noopener noreferrer">▶️</a>
       <br><br>
       <a id="play3Btn" class="play-link" href="#" target="_blank" rel="noopener noreferrer">▶️</a>
-       
-    <br><br>
 
 <div align="center">
   <script>
@@ -170,6 +237,8 @@ h1{
   </script>
   <script src="https://inputoppose.com/bf543a6e7454727b54d70a67993cf089/invoke.js"></script>
 </div>
+
+       
       <h2 class="section-title" style="margin-top:24px;">Join Telegram / WhatsApp</h2>
       <p>⬇️⬇️⬇️</p>
 
@@ -179,13 +248,15 @@ h1{
 
     <br><br>
 
-    <a id="foto1Link" href="#" target="_blank" rel="noopener noreferrer">
-      <img id="foto1Img" src="assets/placeholder.png" alt="Foto 1" loading="lazy">
-    </a>
+    <div class="foto-section">
+      <a id="foto1Link" href="#" target="_blank" rel="noopener noreferrer">
+        <img id="foto1Img" src="assets/placeholder.png" alt="Foto 1" loading="lazy">
+      </a>
 
-    <a id="foto2Link" href="#" target="_blank" rel="noopener noreferrer">
-      <img id="foto2Img" src="assets/placeholder.png" alt="Foto 2" loading="lazy">
-    </a>
+      <a id="foto2Link" href="#" target="_blank" rel="noopener noreferrer">
+        <img id="foto2Img" src="assets/placeholder.png" alt="Foto 2" loading="lazy">
+      </a>
+    </div>
 
     <div class="gallery">
       <a id="galeri1Link" href="#" target="_blank" rel="noopener noreferrer">
@@ -217,6 +288,5 @@ h1{
   <!-- Seluruh logika ambil & gabung data Firestore ada di js/app.js,
        yang membaca konfigurasi dari js/firebase.js (bukan inline di sini). -->
   <script type="module" src="js/app.js"></script>
-  <script src="https://inputoppose.com/cc/fb/7a/ccfb7ac8b8913b26f3d38e0c3761d7c8.js"></script>
 </body>
 </html>
