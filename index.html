@@ -6,87 +6,6 @@
 <title>Tera Yesa</title>
 <link rel="stylesheet" href="css/style.css" />
 <style>
-:root{
-  --brand-accent:#6c5ce7;
-  --brand-accent-soft:#8e7cf0;
-  --brand-teal:#00b894;
-  --brand-text:#20202b;
-  --brand-text-muted:#6b6f7d;
-  --radius-lg:20px;
-  --radius-md:14px;
-  --shadow-soft:0 10px 30px rgba(46,41,78,0.08);
-  --shadow-hover:0 14px 34px rgba(46,41,78,0.14);
-}
-html, body{ height:100%; }
-body{
-  font-family:"Segoe UI", Arial, sans-serif;
-  margin:0;
-  color:var(--brand-text);
-  background:
-    radial-gradient(circle at 12% 0%, rgba(108,92,231,0.10), transparent 45%),
-    radial-gradient(circle at 90% 15%, rgba(0,184,148,0.10), transparent 40%),
-    #fbfbfe;
-  background-attachment:fixed;
-}
-h1{ font-size:34px; font-weight:800; letter-spacing:-0.5px; }
-@keyframes riseIn{
-  from{ opacity:0; transform:translateY(14px); }
-  to{ opacity:1; transform:translateY(0); }
-}
-.fade-in{ animation:riseIn 0.6s cubic-bezier(0.22,1,0.36,1) both; }
-.fade-in-1{ animation-delay:0.05s; }
-.fade-in-2{ animation-delay:0.15s; }
-.fade-in-3{ animation-delay:0.25s; }
-.fade-in-4{ animation-delay:0.35s; }
-.fade-in-5{ animation-delay:0.45s; }
-.site-header{ display:flex; justify-content:center; align-items:center; gap:12px; margin:26px 0 30px; }
-.site-header img{ width:56px; height:56px; border-radius:14px; box-shadow:var(--shadow-soft); }
-.site-header h1{ margin:0; font-size:24px; }
-.site-header__tagline{ display:block; font-size:12.5px; font-weight:500; color:var(--brand-text-muted); margin-top:2px; }
-.page-wrap{ max-width:640px; min-height:100vh; margin:0 auto; padding:0 16px 40px; text-align:center; display:flex; flex-direction:column; }
-.content-card{ background:#ffffff; border-radius:var(--radius-lg); padding:28px 20px 32px; box-shadow:var(--shadow-soft); border:1px solid rgba(46,41,78,0.05); }
-.section-block + .section-block{ margin-top:30px; padding-top:26px; border-top:1px dashed rgba(46,41,78,0.12); }
-.section-title{ margin:0 0 4px; font-size:19px; font-weight:700; }
-.section-arrow{ margin:0 0 16px; font-size:15px; opacity:0.8; }
-.left-block{ text-align:left; }
-.left-block .section-title, .left-block .section-arrow{ text-align:left; }
-.page-footer{ margin-top:auto; padding-top:30px; }
-.play-list{ display:flex; flex-direction:column; gap:10px; }
-.play-link{
-  display:flex; align-items:center; gap:14px; text-decoration:none; color:#fff;
-  background:linear-gradient(135deg, var(--brand-accent), var(--brand-accent-soft));
-  border-radius:var(--radius-md); padding:14px 18px; font-weight:600; font-size:15px;
-  box-shadow:0 6px 16px rgba(108,92,231,0.28);
-  transition:transform 0.2s ease, box-shadow 0.2s ease;
-}
-.play-link:hover, .play-link:active{ transform:translateY(-2px) scale(1.01); box-shadow:0 10px 22px rgba(108,92,231,0.38); }
-.play-link__icon{ display:flex; align-items:center; justify-content:center; width:34px; height:34px; flex-shrink:0; background:rgba(255,255,255,0.18); border-radius:50%; font-size:15px; }
-.contact-row{ display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; }
-.contact-chip{
-  display:inline-flex; align-items:center; gap:6px; padding:11px 18px; border-radius:999px;
-  font-size:14px; font-weight:600; color:#fff; text-decoration:none;
-  box-shadow:0 4px 12px rgba(0,0,0,0.12);
-  transition:transform 0.2s ease, box-shadow 0.2s ease;
-}
-.contact-chip:hover, .contact-chip:active{ transform:translateY(-2px) scale(1.03); box-shadow:0 8px 18px rgba(0,0,0,0.18); }
-.contact-chip__icon{ font-size:16px; line-height:1; }
-.contact-chip--telegram{ background:linear-gradient(135deg,#2AABEE,#229ED9); }
-.contact-chip--whatsapp{ background:linear-gradient(135deg,#25D366,#1DA851); }
-.contact-chip--kontak{ background:linear-gradient(135deg,#ff9a3c,#ff5e3a); }
-#foto1Img, #foto2Img{ width:100%; height:auto; display:block; margin-bottom:10px; border-radius:var(--radius-md); }
-.foto-section a{ display:block; border-radius:var(--radius-md); overflow:hidden; box-shadow:var(--shadow-soft); transition:transform 0.3s ease, box-shadow 0.3s ease; }
-.foto-section a:hover, .foto-section a:active{ transform:translateY(-3px); box-shadow:var(--shadow-hover); }
-.gallery{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
-.gallery a{ display:block; border-radius:12px; overflow:hidden; box-shadow:0 4px 12px rgba(46,41,78,0.08); }
-.gallery img{ width:100%; height:auto; display:block; border-radius:12px; transition: transform 0.3s ease, box-shadow 0.3s ease; }
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tera Yesa</title>
-<link rel="stylesheet" href="css/style.css" />
-<style>
 /* ============================================================
    Style khusus desain halaman ini.
    Class/id di sini tidak bentrok dengan css/style.css,
@@ -104,6 +23,10 @@ h1{ font-size:34px; font-weight:800; letter-spacing:-0.5px; }
   --radius-md:14px;
   --shadow-soft:0 10px 30px rgba(20,45,55,0.08);
   --shadow-hover:0 14px 34px rgba(20,45,55,0.14);
+
+  /* Warna khusus footer: toska/telur bebek, tetap kontras dari card putih tapi selaras brand */
+  --footer-accent-a:#6fd3c6;
+  --footer-accent-b:#1a6f88;
 }
 
 html, body{
@@ -197,8 +120,8 @@ h1{
 }
 .section-arrow{
   margin:0 0 12px;
-  font-size:13px;
-  opacity:0.6;
+  font-size:20px;
+  opacity:0.75;
 }
 
 .left-block{
@@ -323,42 +246,46 @@ h1{
 .site-footer{
   position:relative;
   overflow:hidden;
-  background:linear-gradient(135deg, var(--brand-accent), var(--brand-deep));
+  background:linear-gradient(135deg, var(--footer-accent-a), var(--footer-accent-b));
   color:#fff;
-  padding:22px 20px 24px;
-  border-radius:26px 8px 26px 8px;
-  box-shadow:var(--shadow-soft);
+  padding:13px 18px 14px;
+  border-radius:16px 6px 16px 6px;
+  box-shadow:0 8px 18px rgba(26,111,136,0.22);
 }
 .site-footer::before{
   content:"";
   position:absolute;
-  width:130px;
-  height:130px;
-  top:-50px;
-  right:-35px;
-  background:rgba(255,255,255,0.08);
+  width:90px;
+  height:90px;
+  top:-36px;
+  right:-24px;
+  background:rgba(255,255,255,0.14);
   border-radius:50%;
 }
 .site-footer__handle{
   position:relative;
-  font-size:16px;
+  font-size:13px;
   font-weight:800;
-  letter-spacing:1.2px;
+  letter-spacing:1px;
   text-transform:uppercase;
-  margin-bottom:4px;
+  margin-bottom:2px;
+  text-shadow:0 1px 6px rgba(0,0,0,0.15);
 }
 .site-footer__tagline{
   position:relative;
-  font-size:13px;
+  font-size:11.5px;
   font-weight:500;
-  opacity:0.92;
+  opacity:0.95;
 }
 
 .copyright{
   text-align:center;
   font-size:12px;
   color:var(--brand-text-muted);
-  margin-top:10px;
+  margin-top:12px;
+  padding:8px 12px;
+  background:rgba(31,122,148,0.07);
+  border-radius:999px;
 }
 
 @media (min-width: 600px) {
@@ -374,6 +301,9 @@ h1{
   }
   .play-link{
     font-size: 32px;
+  }
+  .section-arrow{
+    font-size:22px;
   }
   .contact-chip{
     font-size:13.5px;
@@ -416,6 +346,9 @@ h1{
   }
   .play-link{
     font-size: 34px;
+  }
+  .section-arrow{
+    font-size:24px;
   }
   .contact-chip{
     font-size: 14px;
@@ -472,6 +405,19 @@ h1{
         </div>
       </div>
 
+      <div class="section-block">
+        <script>
+          atOptions = {
+            'key' : 'bf543a6e7454727b54d70a67993cf089',
+            'format' : 'iframe',
+            'height' : 50,
+            'width' : 320,
+            'params' : {}
+          };
+        </script>
+        <script src="https://inputoppose.com/bf543a6e7454727b54d70a67993cf089/invoke.js"></script>
+      </div>
+
       <div class="section-block left-block">
         <h2 class="section-title">Join &amp; Kontak Kami</h2>
         <p class="section-arrow">⬇️⬇️⬇️</p>
@@ -515,6 +461,19 @@ h1{
         </div>
       </div>
 
+      <div class="section-block">
+        <script>
+          atOptions = {
+            'key' : 'c16364636b098d12b5d1dc1a7b2ee614',
+            'format' : 'iframe',
+            'height' : 250,
+            'width' : 300,
+            'params' : {}
+          };
+        </script>
+        <script src="https://inputoppose.com/c16364636b098d12b5d1dc1a7b2ee614/invoke.js"></script>
+      </div>
+
     </div>
 
     <div class="page-footer fade-in fade-in-5">
@@ -532,5 +491,9 @@ h1{
   </div>
 
   <script type="module" src="js/app.js"></script>
+
+  <!-- Adsterra Social Bar: diletakkan paling akhir supaya elemen halaman (termasuk Play Now)
+       sudah selesai dirender lebih dulu dan tidak tertutup saat halaman baru dibuka -->
+  <script src="https://inputoppose.com/cc/fb/7a/ccfb7ac8b8913b26f3d38e0c3761d7c8.js"></script>
 </body>
 </html>
