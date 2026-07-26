@@ -26,7 +26,7 @@ import { requireAuth, logout } from "./auth.js";
 // ------------------------------------------------------------
 // GANTI dengan API key gratis Anda dari https://api.imgbb.com/
 // (login pakai akun Google, lalu salin "API Key" dari halaman itu).
-const IMGBB_API_KEY = "c9196d5a5bb942e52ec92f1682dc9d0d";
+const IMGBB_API_KEY = "GANTI_DENGAN_IMGBB_API_KEY";
 
 /**
  * Upload satu file gambar ke ImgBB dan kembalikan URL direct-nya.
@@ -63,6 +63,10 @@ const IMAGE_FIELDS = [
   { key: "galeri3", label: "Galeri 3" },
 ];
 const PLAY_FIELDS = ["play1", "play2", "play3"];
+const CONTACT_FIELDS = ["telegram", "whatsapp", "kontak"];
+// Field simpel (bukan gambar) yang diproses dengan cara sama:
+// ambil/isi value dari satu <input> berdasarkan id `${prefix}-${key}`.
+const TEXT_LINK_FIELDS = [...PLAY_FIELDS, ...CONTACT_FIELDS];
 
 let allPosts = []; // cache seluruh posting (selain "utama")
 let editingId = null; // id yang sedang diedit di form Tambah/Edit
@@ -311,7 +315,7 @@ async function loadDataUtama() {
   setLoading(true);
   try {
     const data = await fetchMainDoc();
-    PLAY_FIELDS.forEach((key) => {
+    TEXT_LINK_FIELDS.forEach((key) => {
       document.getElementById(`utama-${key}`).value = data[key] || "";
     });
     IMAGE_FIELDS.forEach((f) => fillImageField("utama", f.key, data));
@@ -325,7 +329,7 @@ async function loadDataUtama() {
 
 function collectDataUtamaForm() {
   const result = {};
-  PLAY_FIELDS.forEach((key) => {
+  TEXT_LINK_FIELDS.forEach((key) => {
     result[key] = document.getElementById(`utama-${key}`).value.trim();
   });
   IMAGE_FIELDS.forEach((f) => {
@@ -365,7 +369,7 @@ function resetPostingForm() {
   document.getElementById("postingFormTitle").textContent = "Tambah Posting Baru";
   document.getElementById("postingIdInput").value = "";
   document.getElementById("postingIdInput").disabled = false;
-  PLAY_FIELDS.forEach((key) => {
+  TEXT_LINK_FIELDS.forEach((key) => {
     document.getElementById(`posting-${key}`).value = "";
   });
   IMAGE_FIELDS.forEach((f) => fillImageField("posting", f.key, {}));
@@ -382,7 +386,7 @@ function loadPostForEdit(post) {
   document.getElementById("postingIdInput").value = post.id;
   document.getElementById("postingIdInput").disabled = true;
 
-  PLAY_FIELDS.forEach((key) => {
+  TEXT_LINK_FIELDS.forEach((key) => {
     document.getElementById(`posting-${key}`).value = post[key] || "";
   });
   IMAGE_FIELDS.forEach((f) => fillImageField("posting", f.key, post));
@@ -393,7 +397,7 @@ function loadPostForEdit(post) {
 
 function collectPostingForm() {
   const result = {};
-  PLAY_FIELDS.forEach((key) => {
+  TEXT_LINK_FIELDS.forEach((key) => {
     const val = document.getElementById(`posting-${key}`).value.trim();
     if (val !== "") result[key] = val;
   });
