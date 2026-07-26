@@ -79,34 +79,371 @@ h1{ font-size:34px; font-weight:800; letter-spacing:-0.5px; }
 .gallery{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
 .gallery a{ display:block; border-radius:12px; overflow:hidden; box-shadow:0 4px 12px rgba(46,41,78,0.08); }
 .gallery img{ width:100%; height:auto; display:block; border-radius:12px; transition: transform 0.3s ease, box-shadow 0.3s ease; }
-.gallery a:hover img, .gallery a:active img { transform: scale(1.06); }
-.site-footer{ background:linear-gradient(135deg, var(--brand-accent), var(--brand-teal)); color:#fff; padding:18px; text-align:center; border-radius:var(--radius-md); box-shadow:var(--shadow-soft); }
-.site-footer strong{ display:block; font-size:15px; margin-bottom:2px; }
-.copyright{ text-align:center; font-size:12.5px; color:var(--brand-text-muted); margin-top:14px; }
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tera Yesa</title>
+<link rel="stylesheet" href="css/style.css" />
+<style>
+/* ============================================================
+   Style khusus desain halaman ini.
+   Class/id di sini tidak bentrok dengan css/style.css,
+   yang tetap dipakai untuk #pageLoader & .spinner (loading system).
+   Palet: biru toska yang teduh (tidak terlalu terang/mencolok).
+   ============================================================ */
+
+:root{
+  --brand-accent:#1f7a94;
+  --brand-accent-soft:#2f97b3;
+  --brand-deep:#134f61;
+  --brand-text:#20202b;
+  --brand-text-muted:#6b6f7d;
+  --radius-lg:20px;
+  --radius-md:14px;
+  --shadow-soft:0 10px 30px rgba(20,45,55,0.08);
+  --shadow-hover:0 14px 34px rgba(20,45,55,0.14);
+}
+
+html, body{
+  height:100%;
+}
+
+body{
+  font-family:"Segoe UI", Arial, sans-serif;
+  margin:0;
+  color:var(--brand-text);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(31,122,148,0.10), transparent 45%),
+    radial-gradient(circle at 90% 15%, rgba(31,122,148,0.08), transparent 40%),
+    #fbfbfe;
+  background-attachment:fixed;
+}
+
+h1{
+  font-size:34px;
+  font-weight:800;
+  letter-spacing:-0.5px;
+}
+
+@keyframes riseIn{
+  from{ opacity:0; transform:translateY(14px); }
+  to{ opacity:1; transform:translateY(0); }
+}
+.fade-in{
+  animation:riseIn 0.6s cubic-bezier(0.22,1,0.36,1) both;
+}
+.fade-in-1{ animation-delay:0.05s; }
+.fade-in-2{ animation-delay:0.15s; }
+.fade-in-3{ animation-delay:0.25s; }
+.fade-in-4{ animation-delay:0.35s; }
+.fade-in-5{ animation-delay:0.45s; }
+
+.site-header{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:12px;
+  margin:26px 0 30px;
+}
+.site-header img{
+  width:56px;
+  height:56px;
+  border-radius:14px;
+  box-shadow:var(--shadow-soft);
+}
+.site-header h1{
+  margin:0;
+  font-size:24px;
+}
+.site-header__tagline{
+  display:block;
+  font-size:12.5px;
+  font-weight:500;
+  color:var(--brand-text-muted);
+  margin-top:2px;
+}
+
+.page-wrap{
+  max-width:640px;
+  min-height:100vh;
+  margin:0 auto;
+  padding:0 16px 14px;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+}
+
+.content-card{
+  background:#ffffff;
+  border-radius:var(--radius-lg);
+  padding:28px 20px 32px;
+  box-shadow:var(--shadow-soft);
+  border:1px solid rgba(20,45,55,0.05);
+}
+
+.section-block + .section-block{
+  margin-top:26px;
+  padding-top:22px;
+  border-top:1px dashed rgba(20,45,55,0.12);
+}
+
+.section-title{
+  margin:0 0 2px;
+  font-size:16px;
+  font-weight:600;
+  color:var(--brand-text);
+}
+.section-arrow{
+  margin:0 0 12px;
+  font-size:13px;
+  opacity:0.6;
+}
+
+.left-block{
+  text-align:left;
+}
+.left-block .section-title,
+.left-block .section-arrow{
+  text-align:left;
+}
+
+.page-footer{
+  margin-top:auto;
+  padding-top:18px;
+}
+
+.play-list{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+.play-link{
+  display:inline-block;
+  font-size:30px;
+  line-height:1;
+  text-decoration:none;
+  transition:transform 0.2s ease;
+}
+.play-link:hover,
+.play-link:active{
+  transform:scale(1.15);
+}
+
+.contact-row{
+  display:flex;
+  flex-wrap:nowrap;
+  gap:8px;
+  margin-top:10px;
+}
+
+.contact-chip{
+  flex:1 1 0;
+  min-width:0;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  padding:10px 6px;
+  border-radius:14px;
+  font-size:12.5px;
+  font-weight:600;
+  color:#fff;
+  text-decoration:none;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  box-shadow:0 4px 12px rgba(20,45,55,0.14);
+  transition:transform 0.2s ease, box-shadow 0.2s ease;
+}
+.contact-chip:hover,
+.contact-chip:active{
+  transform:translateY(-2px) scale(1.02);
+  box-shadow:0 8px 18px rgba(20,45,55,0.2);
+}
+.contact-chip__icon{
+  font-size:14px;
+  line-height:1;
+  flex-shrink:0;
+}
+
+.contact-chip--telegram{ background:linear-gradient(135deg,#2AABEE,#1f8fc9); }
+.contact-chip--whatsapp{ background:linear-gradient(135deg,#12a4a0,#0d8a86); }
+.contact-chip--kontak{ background:linear-gradient(135deg,#3468a4,#24507e); }
+
+#foto1Img,
+#foto2Img{
+    width:100%;
+    height:auto;
+    display:block;
+    margin-bottom:10px;
+    border-radius:var(--radius-md);
+}
+
+.foto-section a{
+  display:block;
+  border-radius:var(--radius-md);
+  overflow:hidden;
+  box-shadow:var(--shadow-soft);
+  transition:transform 0.3s ease, box-shadow 0.3s ease;
+}
+.foto-section a:hover,
+.foto-section a:active{
+  transform:translateY(-3px);
+  box-shadow:var(--shadow-hover);
+}
+
+.gallery{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+}
+
+.gallery a{
+  display:block;
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 4px 12px rgba(20,45,55,0.08);
+}
+
+.gallery img{
+    width:100%;
+    height:auto;
+    display:block;
+    border-radius:12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gallery a:hover img,
+.gallery a:active img {
+  transform: scale(1.06);
+}
+
+.site-footer{
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(135deg, var(--brand-accent), var(--brand-deep));
+  color:#fff;
+  padding:22px 20px 24px;
+  border-radius:26px 8px 26px 8px;
+  box-shadow:var(--shadow-soft);
+}
+.site-footer::before{
+  content:"";
+  position:absolute;
+  width:130px;
+  height:130px;
+  top:-50px;
+  right:-35px;
+  background:rgba(255,255,255,0.08);
+  border-radius:50%;
+}
+.site-footer__handle{
+  position:relative;
+  font-size:16px;
+  font-weight:800;
+  letter-spacing:1.2px;
+  text-transform:uppercase;
+  margin-bottom:4px;
+}
+.site-footer__tagline{
+  position:relative;
+  font-size:13px;
+  font-weight:500;
+  opacity:0.92;
+}
+
+.copyright{
+  text-align:center;
+  font-size:12px;
+  color:var(--brand-text-muted);
+  margin-top:10px;
+}
+
 @media (min-width: 600px) {
-  .page-wrap{ max-width: 760px; padding: 0 24px 48px; }
-  .content-card{ padding:36px 32px 40px; }
-  h1{ font-size: 38px; }
-  .play-link{ font-size: 16px; padding:16px 20px; }
-  .foto-section{ display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  #foto1Img, #foto2Img{ margin-bottom: 0; height: 100%; object-fit: cover; aspect-ratio: 4 / 3; }
-  .gallery{ gap: 12px; }
+  .page-wrap{
+    max-width: 760px;
+    padding: 0 24px 18px;
+  }
+  .content-card{
+    padding:36px 32px 40px;
+  }
+  h1{
+    font-size: 38px;
+  }
+  .play-link{
+    font-size: 32px;
+  }
+  .contact-chip{
+    font-size:13.5px;
+    padding:11px 10px;
+  }
+  .foto-section{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  #foto1Img,
+  #foto2Img{
+    margin-bottom: 0;
+    height: 100%;
+    object-fit: cover;
+    aspect-ratio: 4 / 3;
+  }
+  .gallery{
+    gap: 12px;
+  }
 }
+
 @media (min-width: 1024px) {
-  .page-wrap{ max-width: 960px; padding: 0 32px 64px; }
-  .content-card{ padding:44px 48px 48px; }
-  .site-header img{ width: 64px; height: 64px; }
-  .site-header h1{ font-size: 30px; }
-  h1{ font-size: 44px; }
-  .play-link{ font-size: 17px; padding:18px 22px; }
-  .contact-chip{ font-size: 15px; padding: 12px 22px; }
-  .gallery{ gap: 16px; }
+  .page-wrap{
+    max-width: 960px;
+    padding: 0 32px 22px;
+  }
+  .content-card{
+    padding:44px 48px 48px;
+  }
+  .site-header img{
+    width: 64px;
+    height: 64px;
+  }
+  .site-header h1{
+    font-size: 30px;
+  }
+  h1{
+    font-size: 44px;
+  }
+  .play-link{
+    font-size: 34px;
+  }
+  .contact-chip{
+    font-size: 14px;
+    padding: 12px 14px;
+  }
+  .gallery{
+    gap: 16px;
+  }
 }
+
 @media (min-width: 1440px) {
-  .page-wrap{ max-width: 1080px; }
+  .page-wrap{
+    max-width: 1080px;
+  }
+}
+
+@media (max-width: 340px) {
+  .contact-chip{
+    font-size:11.5px;
+    padding:9px 4px;
+  }
+  .contact-chip__icon{
+    font-size:13px;
+  }
 }
 </style>
 </head>
+
 <body>
   <div id="pageLoader" class="page-loader">
     <div class="spinner"></div>
@@ -127,22 +464,18 @@ h1{ font-size:34px; font-weight:800; letter-spacing:-0.5px; }
       <div class="section-block left-block">
         <h2 class="section-title">Play Now</h2>
         <p class="section-arrow">⬇️⬇️⬇️</p>
+
         <div class="play-list">
-          <a id="play1Btn" class="play-link" href="#" target="_blank" rel="noopener noreferrer">
-            <span class="play-link__icon">▶️</span> Play 1
-          </a>
-          <a id="play2Btn" class="play-link" href="#" target="_blank" rel="noopener noreferrer">
-            <span class="play-link__icon">▶️</span> Play 2
-          </a>
-          <a id="play3Btn" class="play-link" href="#" target="_blank" rel="noopener noreferrer">
-            <span class="play-link__icon">▶️</span> Play 3
-          </a>
+          <a id="play1Btn" class="play-link" href="#" target="_blank" rel="noopener noreferrer">▶️</a>
+          <a id="play2Btn" class="play-link" href="#" target="_blank" rel="noopener noreferrer">▶️</a>
+          <a id="play3Btn" class="play-link" href="#" target="_blank" rel="noopener noreferrer">▶️</a>
         </div>
       </div>
 
       <div class="section-block left-block">
         <h2 class="section-title">Join &amp; Kontak Kami</h2>
         <p class="section-arrow">⬇️⬇️⬇️</p>
+
         <div class="contact-row">
           <a id="telegramBtn" class="contact-chip contact-chip--telegram" href="#" target="_blank" rel="noopener noreferrer">
             <span class="contact-chip__icon">📨</span> Telegram
@@ -161,6 +494,7 @@ h1{ font-size:34px; font-weight:800; letter-spacing:-0.5px; }
           <a id="foto1Link" href="#" target="_blank" rel="noopener noreferrer">
             <img id="foto1Img" src="assets/placeholder.png" alt="Foto 1" loading="lazy">
           </a>
+
           <a id="foto2Link" href="#" target="_blank" rel="noopener noreferrer">
             <img id="foto2Img" src="assets/placeholder.png" alt="Foto 2" loading="lazy">
           </a>
@@ -185,9 +519,10 @@ h1{ font-size:34px; font-weight:800; letter-spacing:-0.5px; }
 
     <div class="page-footer fade-in fade-in-5">
       <div class="site-footer">
-        <strong>@Tera_Yesa</strong>
-        Thanks for coming !!!
+        <div class="site-footer__handle">@Tera_Yesa</div>
+        <div class="site-footer__tagline">Thanks for coming !!!</div>
       </div>
+
       <p class="copyright">
         ©2026 since<br>
         All Rights Reserved.
