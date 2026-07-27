@@ -8,10 +8,10 @@
 //    field yang ADA di document id akan menimpa field utama,
 //    field yang TIDAK ADA tetap memakai nilai dari utama.
 // 4. Render seluruh field (play1-3, foto1-2, galeri1-3,
-//    telegram/whatsapp/kontak) ke DOM.
-// 5. Tombol Telegram/WhatsApp/Kontak disembunyikan satu per satu
+//    telegram/whatsapp/kontak/discord) ke DOM.
+// 5. Tombol Telegram/WhatsApp/Kontak/Discord disembunyikan satu per satu
 //    kalau link-nya kosong, dan seluruh bar "Join & Kontak Kami"
-//    disembunyikan kalau ketiganya kosong.
+//    disembunyikan kalau keempatnya kosong.
 // ============================================================
 import { db, doc, getDoc } from "./firebase.js";
 
@@ -36,6 +36,7 @@ const FALLBACK_DATA = {
   telegram: "",
   whatsapp: "",
   kontak: "",
+  discord: "",
 };
 
 function getIdFromUrl() {
@@ -124,10 +125,11 @@ function renderData(data) {
   const hasTelegram = setContactButton("telegramBtn", data.telegram);
   const hasWhatsapp = setContactButton("whatsappBtn", data.whatsapp);
   const hasKontak = setContactButton("kontakBtn", data.kontak);
+  const hasDiscord = setContactButton("discordBtn", data.discord);
 
   const joinSection = document.getElementById("joinKontakSection");
   if (joinSection) {
-    joinSection.style.display = (hasTelegram || hasWhatsapp || hasKontak) ? "" : "none";
+    joinSection.style.display = (hasTelegram || hasWhatsapp || hasKontak || hasDiscord) ? "" : "none";
   }
 }
 
