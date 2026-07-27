@@ -63,7 +63,7 @@ const IMAGE_FIELDS = [
   { key: "galeri3", label: "Galeri 3" },
 ];
 const PLAY_FIELDS = ["play1", "play2", "play3"];
-const CONTACT_FIELDS = ["telegram", "whatsapp", "kontak"];
+const CONTACT_FIELDS = ["telegram", "whatsapp", "kontak", "discord"];
 // Field simpel (bukan gambar) yang diproses dengan cara sama:
 // ambil/isi value dari satu <input> berdasarkan id `${prefix}-${key}`.
 const TEXT_LINK_FIELDS = [...PLAY_FIELDS, ...CONTACT_FIELDS];
