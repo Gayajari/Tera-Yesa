@@ -129,6 +129,7 @@
 
   const params = new URLSearchParams(window.location.search);
   const toParam = params.get('to');
+  const idParam = params.get('id');
 
   const countdownEl = document.getElementById('countdown');
   const skipBtn = document.getElementById('skipBtn');
@@ -144,26 +145,44 @@
       return;
     }
 
+    const fieldName = FIELD_MAP[toParam];
+
     try {
-      const docRef = doc(db, COLLECTION_NAME, DOCUMENT_ID);
-      const docSnap = await getDoc(docRef);
+      const mainRef = doc(db, COLLECTION_NAME, DOCUMENT_ID);
+      const mainSnap = await getDoc(mainRef);
 
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        const fieldName = FIELD_MAP[toParam];
-        targetURL = data[fieldName];
-
-        if (!targetURL) {
-          statusText.innerHTML = '<span class="error-text">Tautan belum diisi di Data Utama.</span>';
-          skipBtn.style.display = 'none';
-          return;
-        }
-
-        startCountdown();
-      } else {
+      if (!mainSnap.exists()) {
         statusText.innerHTML = '<span class="error-text">Data tidak ditemukan.</span>';
         skipBtn.style.display = 'none';
+        return;
       }
+
+      const mainData = mainSnap.data();
+      let finalURL = mainData[fieldName];
+
+      // Kalau ada ?id= (posting spesifik), cek dulu apakah field ini
+      // ditimpa di posting tersebut. Kalau kosong/tidak ada, tetap pakai Data Utama.
+      if (idParam) {
+        const overrideRef = doc(db, COLLECTION_NAME, idParam);
+        const overrideSnap = await getDoc(overrideRef);
+        if (overrideSnap.exists()) {
+          const overrideData = overrideSnap.data();
+          const overrideVal = overrideData[fieldName];
+          if (overrideVal !== undefined && overrideVal !== "") {
+            finalURL = overrideVal;
+          }
+        }
+      }
+
+      targetURL = finalURL;
+
+      if (!targetURL) {
+        statusText.innerHTML = '<span class="error-text">Tautan belum diisi di Data Utama.</span>';
+        skipBtn.style.display = 'none';
+        return;
+      }
+
+      startCountdown();
     } catch (err) {
       console.error(err);
       statusText.innerHTML = '<span class="error-text">Gagal memuat tautan. Coba lagi nanti.</span>';
