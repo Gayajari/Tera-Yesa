@@ -7,7 +7,13 @@
 // 3. Jika ada ?id=, ambil document "links/{id}" dan gabungkan:
 //    field yang ADA di document id akan menimpa field utama,
 //    field yang TIDAK ADA tetap memakai nilai dari utama.
-// 4. Render seluruh field (play1-3, foto1-2, galeri1-3) ke DOM.
+// 4. Render seluruh field (play1-3, foto1-2, galeri1-3,
+//    telegram/whatsapp/kontak/discord) ke DOM.
+// 5. Tombol Telegram/WhatsApp/Kontak/Discord disembunyikan satu per satu
+//    kalau link-nya kosong, dan seluruh bar "Join & Kontak Kami"
+//    disembunyikan kalau keempatnya kosong.
+// 6. Tombol Telegram/WhatsApp/Kontak/Discord diarahkan dulu ke
+//    redirect.html?to=<key> (halaman jeda iklan) sebelum ke link asli.
 // ============================================================
 import { db, doc, getDoc } from "./firebase.js";
 
@@ -29,6 +35,10 @@ const FALLBACK_DATA = {
   galeri2Link: "#",
   galeri3: "",
   galeri3Link: "#",
+  telegram: "",
+  whatsapp: "",
+  kontak: "",
+  discord: "",
 };
 
 function getIdFromUrl() {
@@ -82,6 +92,33 @@ function setPlayButton(btnId, link) {
   }
 }
 
+/**
+ * Set href tombol kontak supaya lewat redirect.html?to=<key> dulu
+ * (halaman jeda iklan), baru dari sana redirect ke link asli.
+ * Tombol disembunyikan kalau link aslinya kosong.
+ * Mengembalikan true kalau link valid (dipakai untuk cek bar secara keseluruhan).
+ */
+function setContactButton(btnId, redirectKey, link) {
+  const btn = document.getElementById(btnId);
+  if (!btn) return false;
+
+  const trimmed = (link || "").trim();
+  const hasLink = trimmed !== "" && trimmed !== "#";
+
+  if (hasLink) {
+    const currentId = getIdFromUrl();
+    let redirectHref = `redirect.html?to=${redirectKey}`;
+    if (currentId) {
+      redirectHref += `&id=${encodeURIComponent(currentId)}`;
+    }
+    btn.href = redirectHref;
+    btn.style.display = "";
+  } else {
+    btn.style.display = "none";
+  }
+  return hasLink;
+}
+
 function renderData(data) {
   setPlayButton("play1Btn", data.play1);
   setPlayButton("play2Btn", data.play2);
@@ -93,6 +130,16 @@ function renderData(data) {
   setImageField("galeri1Img", "galeri1Link", data.galeri1, data.galeri1Link);
   setImageField("galeri2Img", "galeri2Link", data.galeri2, data.galeri2Link);
   setImageField("galeri3Img", "galeri3Link", data.galeri3, data.galeri3Link);
+
+  const hasTelegram = setContactButton("telegramBtn", "telegram", data.telegram);
+  const hasWhatsapp = setContactButton("whatsappBtn", "whatsapp", data.whatsapp);
+  const hasKontak = setContactButton("kontakBtn", "kontak", data.kontak);
+  const hasDiscord = setContactButton("discordBtn", "discord", data.discord);
+
+  const joinSection = document.getElementById("joinKontakSection");
+  if (joinSection) {
+    joinSection.style.display = (hasTelegram || hasWhatsapp || hasKontak || hasDiscord) ? "" : "none";
+  }
 }
 
 function hideLoader() {
