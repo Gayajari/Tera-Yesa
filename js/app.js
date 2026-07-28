@@ -1,174 +1,221 @@
-// js/app.js
-// ============================================================
-// Logika halaman publik (index.html)
-// ------------------------------------------------------------
-// 1. Baca parameter ?id= dari URL.
-// 2. Ambil document "links/utama" sebagai template dasar.
-// 3. Jika ada ?id=, ambil document "links/{id}" dan gabungkan:
-//    field yang ADA di document id akan menimpa field utama,
-//    field yang TIDAK ADA tetap memakai nilai dari utama.
-// 4. Render seluruh field (play1-3, foto1-2, galeri1-3,
-//    telegram/whatsapp/kontak/discord) ke DOM.
-// 5. Tombol Telegram/WhatsApp/Kontak/Discord disembunyikan satu per satu
-//    kalau link-nya kosong, dan seluruh bar "Join & Kontak Kami"
-//    disembunyikan kalau keempatnya kosong.
-// ============================================================
-import { db, doc, getDoc } from "./firebase.js";
-
-const COLLECTION_NAME = "links";
-const MAIN_DOC_ID = "utama";
-
-/** Field default kalau document utama sama sekali belum diisi */
-const FALLBACK_DATA = {
-  play1: "#",
-  play2: "#",
-  play3: "#",
-  foto1: "",
-  foto1Link: "#",
-  foto2: "",
-  foto2Link: "#",
-  galeri1: "",
-  galeri1Link: "#",
-  galeri2: "",
-  galeri2Link: "#",
-  galeri3: "",
-  galeri3Link: "#",
-  telegram: "",
-  whatsapp: "",
-  kontak: "",
-  discord: "",
-};
-
-function getIdFromUrl() {
-  const params = new URLSearchParams(window.location.search);
-  return params.get("id");
-}
-
-async function fetchDoc(docId) {
-  try {
-    const snap = await getDoc(doc(db, COLLECTION_NAME, docId));
-    return snap.exists() ? snap.data() : null;
-  } catch (err) {
-    console.error(`Gagal mengambil document "${docId}":`, err);
-    return null;
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menuju Tautan... | Tera Yesa</title>
+<style>
+  :root {
+    --toska: #3fb8af;
+    --toska-dark: #2e8f88;
+    --telur-bebek: #eaf6f4;
   }
-}
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: linear-gradient(180deg, var(--telur-bebek) 0%, #ffffff 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    color: #234;
+  }
+  .card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(63, 184, 175, 0.15);
+    padding: 32px 24px;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+  }
+  .logo { font-size: 20px; font-weight: 700; color: var(--toska-dark); margin-bottom: 6px; letter-spacing: 0.5px; }
+  .subtitle { font-size: 14px; color: #789; margin-bottom: 24px; }
+  .timer-circle {
+    width: 90px; height: 90px; border-radius: 50%;
+    border: 5px solid var(--telur-bebek); border-top-color: var(--toska);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px; font-size: 28px; font-weight: 700; color: var(--toska-dark);
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin { 100% { transform: rotate(360deg); } }
+  .timer-circle span { animation: spin 1s linear infinite reverse; }
+  .status-text { font-size: 15px; color: #456; margin-bottom: 24px; min-height: 20px; }
+  .ad-slot {
+    background: var(--telur-bebek); border: 1px dashed #b7ded8; border-radius: 12px;
+    min-height: 120px; display: flex; align-items: center; justify-content: center;
+    color: #9ab; font-size: 13px; margin-bottom: 20px; overflow: hidden;
+  }
+  .skip-btn {
+    display: inline-block; background: var(--toska); color: #fff; border: none;
+    padding: 12px 28px; border-radius: 30px; font-size: 15px; font-weight: 600;
+    cursor: pointer; opacity: 0.4; pointer-events: none; transition: all 0.3s ease; width: 100%;
+  }
+  .skip-btn.active { opacity: 1; pointer-events: auto; }
+  .skip-btn.active:hover { background: var(--toska-dark); }
+  .footer-note { margin-top: 20px; font-size: 12px; color: #aac; }
+  .error-text { color: #c0392b; font-size: 13px; margin-top: 10px; }
+</style>
+</head>
+<body>
 
-/**
- * Gabungkan data utama dengan data override.
- * Hanya field yang benar-benar ada (bukan undefined) di override
- * yang akan menimpa nilai dari data utama.
- */
-function mergeData(mainData, overrideData) {
-  const merged = { ...FALLBACK_DATA, ...(mainData || {}) };
-  if (overrideData) {
-    for (const key of Object.keys(overrideData)) {
-      if (overrideData[key] !== undefined && overrideData[key] !== "") {
-        merged[key] = overrideData[key];
+  <div class="card">
+    <div class="logo">Tera Yesa</div>
+    <div class="subtitle" id="subtitle">Mempersiapkan tautan kamu...</div>
+
+    <div class="timer-circle"><span id="countdown">8</span></div>
+
+    <div class="status-text" id="statusText">Mohon tunggu sebentar</div>
+
+    <!-- ============================= -->
+    <!-- SLOT IKLAN BANNER 300x250 ADSTERRA -->
+    <!-- Tempel script banner Adsterra kamu di dalam div ini -->
+    <!-- ============================= -->
+    <div class="ad-slot" id="adSlot">
+      <script>
+        atOptions = {
+          'key' : 'c16364636b098d12b5d1dc1a7b2ee614',
+          'format' : 'iframe',
+          'height' : 250,
+          'width' : 300,
+          'params' : {}
+        };
+      </script>
+      <script src="https://inputoppose.com/c16364636b098d12b5d1dc1a7b2ee614/invoke.js"></script>
+    </div>
+
+    <button class="skip-btn" id="skipBtn" onclick="goToTarget()">Lanjutkan</button>
+
+    <div class="footer-note">@Tera_Yesa</div>
+  </div>
+
+<!-- ============================= -->
+<!-- SLOT SOCIAL BAR ADSTERRA (opsional, taruh script di sini) -->
+<!-- <script type="text/javascript" src="//your-adsterra-socialbar-script.js"></script> -->
+<!-- ============================= -->
+
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyChs-RWRRQHhLOMoEddqp4NxIEThBtwTVY",
+    authDomain: "tera-yesa-6d925.firebaseapp.com",
+    projectId: "tera-yesa-6d925",
+    storageBucket: "tera-yesa-6d925.firebasestorage.app",
+    messagingSenderId: "291350135855",
+    appId: "1:291350135855:web:757fddff1e01d115af32da",
+    measurementId: "G-0QG6QJGQT0"
+  };
+
+  const COLLECTION_NAME = "links";
+  const DOCUMENT_ID = "utama";
+
+  // key kiri = nilai parameter ?to=, value kanan = nama field di Firestore (collection "links", doc "utama")
+  const FIELD_MAP = {
+    telegram: "telegram",
+    whatsapp: "whatsapp",
+    kontak: "kontak",
+    discord: "discord"
+  };
+
+  const DURATION = 8; // detik jeda iklan
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const params = new URLSearchParams(window.location.search);
+  const toParam = params.get('to');
+  const idParam = params.get('id');
+
+  const countdownEl = document.getElementById('countdown');
+  const skipBtn = document.getElementById('skipBtn');
+  const statusText = document.getElementById('statusText');
+  const subtitle = document.getElementById('subtitle');
+
+  let targetURL = null;
+
+  async function loadTargetURL() {
+    if (!toParam || !FIELD_MAP[toParam]) {
+      statusText.innerHTML = '<span class="error-text">Tautan tujuan tidak valid.</span>';
+      skipBtn.style.display = 'none';
+      return;
+    }
+
+    const fieldName = FIELD_MAP[toParam];
+
+    try {
+      const mainRef = doc(db, COLLECTION_NAME, DOCUMENT_ID);
+      const mainSnap = await getDoc(mainRef);
+
+      if (!mainSnap.exists()) {
+        statusText.innerHTML = '<span class="error-text">Data tidak ditemukan.</span>';
+        skipBtn.style.display = 'none';
+        return;
       }
+
+      const mainData = mainSnap.data();
+      let finalURL = mainData[fieldName];
+
+      // Kalau ada ?id= (posting spesifik), cek dulu apakah field ini
+      // ditimpa di posting tersebut. Kalau kosong/tidak ada, tetap pakai Data Utama.
+      if (idParam) {
+        const overrideRef = doc(db, COLLECTION_NAME, idParam);
+        const overrideSnap = await getDoc(overrideRef);
+        if (overrideSnap.exists()) {
+          const overrideData = overrideSnap.data();
+          const overrideVal = overrideData[fieldName];
+          if (overrideVal !== undefined && overrideVal !== "") {
+            finalURL = overrideVal;
+          }
+        }
+      }
+
+      targetURL = finalURL;
+
+      if (!targetURL) {
+        statusText.innerHTML = '<span class="error-text">Tautan belum diisi di Data Utama.</span>';
+        skipBtn.style.display = 'none';
+        return;
+      }
+
+      startCountdown();
+    } catch (err) {
+      console.error(err);
+      statusText.innerHTML = '<span class="error-text">Gagal memuat tautan. Coba lagi nanti.</span>';
+      skipBtn.style.display = 'none';
     }
   }
-  return merged;
-}
 
-function setImageField(imgId, linkWrapperId, url, link) {
-  const img = document.getElementById(imgId);
-  const wrapper = document.getElementById(linkWrapperId);
-  if (img) {
-    img.src = url && url.trim() !== "" ? url : "assets/placeholder.png";
-    img.loading = "lazy";
-  }
-  if (wrapper) {
-    wrapper.href = link && link.trim() !== "" ? link : "#";
-  }
-}
+  function startCountdown() {
+    let remaining = DURATION;
+    countdownEl.textContent = remaining;
 
-function setPlayButton(btnId, link) {
-  const btn = document.getElementById(btnId);
-  if (btn) {
-    btn.href = link && link.trim() !== "" ? link : "#";
-  }
-}
+    const timer = setInterval(() => {
+      remaining--;
+      countdownEl.textContent = remaining;
 
-/**
- * Set href tombol kontak, dan sembunyikan tombolnya kalau link kosong.
- * Mengembalikan true kalau link valid (dipakai untuk cek bar secara keseluruhan).
- */
-function setContactButton(btnId, link) {
-  const btn = document.getElementById(btnId);
-  if (!btn) return false;
-
-  const trimmed = (link || "").trim();
-  const hasLink = trimmed !== "" && trimmed !== "#";
-
-  if (hasLink) {
-    btn.href = trimmed;
-    btn.style.display = "";
-  } else {
-    btn.style.display = "none";
-  }
-  return hasLink;
-}
-
-function renderData(data) {
-  setPlayButton("play1Btn", data.play1);
-  setPlayButton("play2Btn", data.play2);
-  setPlayButton("play3Btn", data.play3);
-
-  setImageField("foto1Img", "foto1Link", data.foto1, data.foto1Link);
-  setImageField("foto2Img", "foto2Link", data.foto2, data.foto2Link);
-
-  setImageField("galeri1Img", "galeri1Link", data.galeri1, data.galeri1Link);
-  setImageField("galeri2Img", "galeri2Link", data.galeri2, data.galeri2Link);
-  setImageField("galeri3Img", "galeri3Link", data.galeri3, data.galeri3Link);
-
-  const hasTelegram = setContactButton("telegramBtn", data.telegram);
-  const hasWhatsapp = setContactButton("whatsappBtn", data.whatsapp);
-  const hasKontak = setContactButton("kontakBtn", data.kontak);
-  const hasDiscord = setContactButton("discordBtn", data.discord);
-
-  const joinSection = document.getElementById("joinKontakSection");
-  if (joinSection) {
-    joinSection.style.display = (hasTelegram || hasWhatsapp || hasKontak || hasDiscord) ? "" : "none";
-  }
-}
-
-function hideLoader() {
-  const loader = document.getElementById("pageLoader");
-  if (loader) loader.classList.add("hidden");
-}
-
-function showErrorState() {
-  const container = document.getElementById("mainContent");
-  if (container) {
-    container.innerHTML = `
-      <div class="error-state">
-        <p>Konten belum tersedia. Silakan cek kembali nanti.</p>
-      </div>`;
-  }
-}
-
-async function init() {
-  const id = getIdFromUrl();
-  const mainData = await fetchDoc(MAIN_DOC_ID);
-
-  if (!mainData) {
-    hideLoader();
-    showErrorState();
-    return;
+      if (remaining <= 0) {
+        clearInterval(timer);
+        countdownEl.textContent = "✓";
+        statusText.textContent = "Siap! Klik tombol di bawah untuk lanjut.";
+        skipBtn.classList.add('active');
+        setTimeout(goToTarget, 500);
+      }
+    }, 1000);
   }
 
-  let finalData = mainData;
+  window.goToTarget = function() {
+    if (targetURL) {
+      window.location.href = targetURL;
+    }
+  };
 
-  if (id) {
-    const overrideData = await fetchDoc(id);
-    finalData = mergeData(mainData, overrideData);
-  } else {
-    finalData = mergeData(mainData, null);
-  }
+  loadTargetURL();
+</script>
 
-  renderData(finalData);
-  hideLoader();
-}
-
-document.addEventListener("DOMContentLoaded", init);
+</body>
+</html>
