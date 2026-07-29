@@ -131,6 +131,19 @@
   const toParam = params.get('to');
   const idParam = params.get('id');
 
+  // Warna tema mengikuti warna asli tombol di index.html (.contact-chip--*)
+  const THEME_MAP = {
+    telegram: { main: "#2AABEE", dark: "#1f8fc9" },
+    whatsapp: { main: "#12a4a0", dark: "#0d8a86" },
+    kontak:   { main: "#3468a4", dark: "#24507e" },
+    discord:  { main: "#5865F2", dark: "#3d47c9" }
+  };
+
+  if (toParam && THEME_MAP[toParam]) {
+    document.documentElement.style.setProperty('--toska', THEME_MAP[toParam].main);
+    document.documentElement.style.setProperty('--toska-dark', THEME_MAP[toParam].dark);
+  }
+
   const countdownEl = document.getElementById('countdown');
   const skipBtn = document.getElementById('skipBtn');
   const statusText = document.getElementById('statusText');
