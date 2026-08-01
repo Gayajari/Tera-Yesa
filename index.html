@@ -295,6 +295,19 @@ h1{
   border-radius:999px;
 }
 
+/* Slot iklan (iframe sandboxed) */
+.ads-native-slot{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  overflow:hidden;
+}
+.ads-native-slot iframe{
+  border:none;
+  display:block;
+  max-width:100%;
+}
+
 @media (min-width: 600px) {
   .page-wrap{
     max-width: 760px;
@@ -418,16 +431,8 @@ h1{
       </div>
 
       <div class="section-block">
-        <script>
-          atOptions = {
-            'key' : 'bf543a6e7454727b54d70a67993cf089',
-            'format' : 'iframe',
-            'height' : 50,
-            'width' : 320,
-            'params' : {}
-          };
-        </script>
-        <script src="https://inputoppose.com/bf543a6e7454727b54d70a67993cf089/invoke.js"></script>
+        <!-- Banner 320x50, dibungkus iframe sandbox lewat script di bawah -->
+        <div class="ads-native-slot" id="adsSlotLeaderboard"></div>
       </div>
 
       <div class="section-block left-block" id="joinKontakSection">
@@ -477,16 +482,8 @@ h1{
       </div>
 
       <div class="section-block">
-        <script>
-          atOptions = {
-            'key' : 'c16364636b098d12b5d1dc1a7b2ee614',
-            'format' : 'iframe',
-            'height' : 250,
-            'width' : 300,
-            'params' : {}
-          };
-        </script>
-        <script src="https://inputoppose.com/c16364636b098d12b5d1dc1a7b2ee614/invoke.js"></script>
+        <!-- Banner 300x250, dibungkus iframe sandbox lewat script di bawah -->
+        <div class="ads-native-slot" id="adsSlotSquare"></div>
       </div>
 
     </div>
@@ -507,8 +504,46 @@ h1{
 
   <script type="module" src="js/app.js"></script>
 
-  <!-- Adsterra Social Bar: diletakkan paling akhir supaya elemen halaman (termasuk Play Now)
-       sudah selesai dirender lebih dulu dan tidak tertutup saat halaman baru dibuka -->
-<script src="https://inputoppose.com/cc/fb/7a/ccfb7ac8b8913b26f3d38e0c3761d7c8.js"></script>
+  <!-- ============================================================
+       Slot iklan banner (320x50 & 300x250), dibungkus iframe sandbox:
+       iklan tetap tampil & lapor impresi normal, tapi TIDAK BISA
+       memicu redirect/tab baru otomatis tanpa klik manual pengunjung.
+       ============================================================ -->
+  <script>
+    (function () {
+      const ADS_ZONE_LEADERBOARD = { key: "bf543a6e7454727b54d70a67993cf089", width: 320, height: 50 };
+      const ADS_ZONE_SQUARE = { key: "c16364636b098d12b5d1dc1a7b2ee614", width: 300, height: 250 };
+
+      function buildAdsIframe(zone) {
+        const iframe = document.createElement("iframe");
+        iframe.width = String(zone.width);
+        iframe.height = String(zone.height);
+        iframe.scrolling = "no";
+        iframe.loading = "lazy";
+        iframe.sandbox = "allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation";
+        iframe.srcdoc = `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{margin:0;display:flex;align-items:center;justify-content:center;overflow:hidden;}</style></head><body>
+          <script>
+            atOptions = { 'key': '${zone.key}', 'format': 'iframe', 'height': ${zone.height}, 'width': ${zone.width}, 'params': {} };
+          <\/script>
+          <script src="https://inputoppose.com/${zone.key}/invoke.js"><\/script>
+        </body></html>`;
+        return iframe;
+      }
+
+      document.getElementById("adsSlotLeaderboard").appendChild(buildAdsIframe(ADS_ZONE_LEADERBOARD));
+      document.getElementById("adsSlotSquare").appendChild(buildAdsIframe(ADS_ZONE_SQUARE));
+    })();
+  </script>
+
+  <!-- ============================================================
+       DINONAKTIFKAN: Adsterra Social Bar.
+       Jenis iklan ini (bukan atOptions banner) biasanya menempel
+       event listener ke seluruh <body> dan bisa memicu iklan
+       fullscreen/redirect otomatis begitu halaman dibuka -- persis
+       gejala "iklan selayar" yang ingin dihindari. Aktifkan lagi
+       hanya jika kamu memang sudah putuskan menerima risiko itu.
+
+       <script src="https://inputoppose.com/cc/fb/7a/ccfb7ac8b8913b26f3d38e0c3761d7c8.js"></script>
+       ============================================================ -->
 </body>
 </html>
