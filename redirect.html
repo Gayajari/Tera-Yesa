@@ -48,6 +48,7 @@
     min-height: 120px; display: flex; align-items: center; justify-content: center;
     color: #9ab; font-size: 13px; margin-bottom: 20px; overflow: hidden;
   }
+  .ad-slot iframe { border: none; display: block; }
   .skip-btn {
     display: inline-block; background: var(--toska); color: #fff; border: none;
     padding: 12px 28px; border-radius: 30px; font-size: 15px; font-weight: 600;
@@ -65,31 +66,46 @@
     <div class="logo">Tera Yesa</div>
     <div class="subtitle" id="subtitle">Mempersiapkan tautan kamu...</div>
 
-    <div class="timer-circle"><span id="countdown">8</span></div>
+    <div class="timer-circle"><span id="countdown">5</span></div>
 
     <div class="status-text" id="statusText">Mohon tunggu sebentar</div>
 
     <!-- ============================= -->
-    <!-- SLOT IKLAN BANNER 300x250 ADSTERRA -->
-    <!-- Tempel script banner Adsterra kamu di dalam div ini -->
+    <!-- SLOT IKLAN BANNER 300x250 -->
+    <!-- Dibungkus iframe sandbox: iklan tetap tampil & lapor impresi normal,
+         tapi tidak bisa memicu redirect/navigasi sendiri tanpa klik manual
+         pengguna -- supaya tidak menyerobot redirect timer di bawah. -->
     <!-- ============================= -->
-    <div class="ad-slot" id="adSlot">
-      <script>
-        atOptions = {
-          'key' : 'c16364636b098d12b5d1dc1a7b2ee614',
-          'format' : 'iframe',
-          'height' : 250,
-          'width' : 300,
-          'params' : {}
-        };
-      </script>
-      <script src="https://inputoppose.com/c16364636b098d12b5d1dc1a7b2ee614/invoke.js"></script>
-    </div>
+    <div class="ad-slot" id="adSlot"></div>
 
     <button class="skip-btn" id="skipBtn" onclick="goToTarget()">Lanjutkan</button>
 
     <div class="footer-note">@Tera_Yesa</div>
   </div>
+
+<script>
+  (function () {
+    const ADS_ZONE_SQUARE = { key: "c16364636b098d12b5d1dc1a7b2ee614", width: 300, height: 250 };
+
+    function buildAdsIframe(zone) {
+      const iframe = document.createElement("iframe");
+      iframe.width = String(zone.width);
+      iframe.height = String(zone.height);
+      iframe.scrolling = "no";
+      iframe.loading = "lazy";
+      iframe.sandbox = "allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation";
+      iframe.srcdoc = `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{margin:0;display:flex;align-items:center;justify-content:center;overflow:hidden;}</style></head><body>
+        <script>
+          atOptions = { 'key': '${zone.key}', 'format': 'iframe', 'height': ${zone.height}, 'width': ${zone.width}, 'params': {} };
+        <\/script>
+        <script src="https://inputoppose.com/${zone.key}/invoke.js"><\/script>
+      </body></html>`;
+      return iframe;
+    }
+
+    document.getElementById("adSlot").appendChild(buildAdsIframe(ADS_ZONE_SQUARE));
+  })();
+</script>
 
 <!-- ============================= -->
 <!-- SLOT SOCIAL BAR ADSTERRA (opsional, taruh script di sini) -->
@@ -122,7 +138,7 @@
     discord: "discord"
   };
 
-  const DURATION = 8; // detik jeda iklan
+  const DURATION = 5; // detik jeda iklan
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
